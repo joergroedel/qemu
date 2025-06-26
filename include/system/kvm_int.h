@@ -107,7 +107,7 @@ struct KVMState
     /* Max number of KVM slots supported */
     int nr_slots_max;
     int fd;
-    int vmfd;
+    int plane_fds[KVM_MAX_VCPU_PLANES];
     int coalesced_mmio;
     int coalesced_pio;
     struct kvm_coalesced_mmio_ring *coalesced_mmio_ring;
@@ -168,6 +168,26 @@ struct KVMState
     uint16_t xen_evtchn_max_pirq;
     char *device;
 };
+
+static inline void kvm_set_plane_fd(KVMState *s, unsigned plane, int fd)
+{
+    s->plane_fds[plane] = fd;
+}
+
+static inline int kvm_get_plane_fd(KVMState *s, unsigned plane)
+{
+    return s->plane_fds[plane];
+}
+
+static inline void kvm_set_vm_fd(KVMState *s, int vmfd)
+{
+    kvm_set_plane_fd(s, 0, vmfd);
+}
+
+static inline int kvm_vm_fd(KVMState *s)
+{
+    return kvm_get_plane_fd(s, 0);
+}
 
 void kvm_memory_listener_register(KVMState *s, KVMMemoryListener *kml,
                                   AddressSpace *as, int as_id, const char *name);
