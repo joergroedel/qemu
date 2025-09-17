@@ -35,6 +35,7 @@
 #define MC_VECTOR 18
 #define XM_VECTOR 19
 #define VE_VECTOR 20
+#define HV_VECTOR 28
 
 /* Select x86 specific features in <linux/kvm.h> */
 #define __KVM_HAVE_PIT
@@ -845,6 +846,7 @@ struct kvm_sev_snp_launch_start {
 /* Kept in sync with firmware values for simplicity. */
 #define KVM_SEV_PAGE_TYPE_INVALID		0x0
 #define KVM_SEV_SNP_PAGE_TYPE_NORMAL		0x1
+#define KVM_SEV_SNP_PAGE_TYPE_VMSA		0x2
 #define KVM_SEV_SNP_PAGE_TYPE_ZERO		0x3
 #define KVM_SEV_SNP_PAGE_TYPE_UNMEASURED	0x4
 #define KVM_SEV_SNP_PAGE_TYPE_SECRETS		0x5
@@ -857,7 +859,7 @@ struct kvm_sev_snp_launch_update {
 	__u8 type;
 	__u8 pad0;
 	__u16 flags;
-	__u32 pad1;
+	__u32 vcpu_id;
 	__u64 pad2[4];
 };
 
@@ -1005,5 +1007,7 @@ struct kvm_tdx_init_mem_region {
 	__u64 gpa;
 	__u64 nr_pages;
 };
+
+#define KVM_MAX_VCPU_PLANES	16
 
 #endif /* _ASM_X86_KVM_H */
