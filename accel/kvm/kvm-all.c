@@ -519,6 +519,10 @@ static int kvm_create_vcpu(CPUState *cpu)
     cpu->dirty_pages = 0;
     cpu->throttle_us_per_full = 0;
 
+    if (qdev_default_plane() > 0) {
+        kvm_create_vcpu_plane(cpu, qdev_default_plane());
+    }
+
     trace_kvm_create_vcpu(cpu->cpu_index, vcpu_id, kvm_fd);
 
     return 0;
